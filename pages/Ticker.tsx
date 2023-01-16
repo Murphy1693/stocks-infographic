@@ -1,24 +1,22 @@
 import { useEffect, useState } from "react";
 import TickerPrice from "./TickerPrice";
+import { finnhubSubscriptions } from "../utils/finnhubSubscriptions";
 
 type TickerProps = {
-  symbol: string,
   index: number,
   final?: boolean
 }
 
-let arr = ["BINANCE:BTCUSDT", "BINANCE:ETHUSDT", "BINANCE:DOGEUSDT"]
-
-const Ticker = ( {symbol, index, final}: TickerProps) => {
-  const [word, setWord] = useState(arr[index])
+const Ticker = ( {index, final}: TickerProps) => {
+  const [tickerObject, setTickerObject] = useState(finnhubSubscriptions[index])
   const [price, setPrice] = useState(0);
 
   return <div
   onClick={() => {
-    if (word === "BINANCE:BTCUSDT") {
-      setWord("BINANCE:ETHUSDT");
+    if (tickerObject.symbol === "BINANCE:BTCUSDT") {
+      setTickerObject(finnhubSubscriptions[1])
     } else {
-      setWord("BINANCE:BTCUSDT");
+      setTickerObject(finnhubSubscriptions[0])
     }
   }}
   className={
@@ -28,8 +26,8 @@ const Ticker = ( {symbol, index, final}: TickerProps) => {
   }
 >
   <div className="flex justify-between">
-    <span>{index}</span>
-    <TickerPrice symbol={word} index={index}></TickerPrice>
+    <span>{tickerObject.display}</span>
+    <TickerPrice symbol={tickerObject.symbol} index={index}></TickerPrice>
   </div>
 </div>
 }
