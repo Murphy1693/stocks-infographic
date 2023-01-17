@@ -4,25 +4,20 @@ import { client, Message } from "websocket";
 import socketSubscriptions from "../../utils/subscription";
 import { finnhubSubscriptions } from "../../utils/finnhubSubscriptions";
 import http from "http";
-import { addMessageListener, addSubscription } from "../../utils/FinnhubSocket";
-
-export type priceContainer = {
-  [key: string]: number;
-};
+import { recordStocks } from "../../utils/recordStocks";
+import FinnhubSocket from "../../utils/FinnhubSocket";
 
 const frontendSocket = new SocketIOServer();
 
-const payload: priceContainer = {};
-
-addMessageListener((msg) => {
+FinnhubSocket.addMessageListener((msg) => {
   msg.data?.forEach((tradeInstance) => {
-    payload[tradeInstance.s] = tradeInstance.p;
+    FinnhubSocket.alterPayload(tradeInstance.s, tradeInstance.p);
   });
-  frontendSocket.emit("message", payload);
+  frontendSocket.emit("message", FinnhubSocket.getPayload());
 });
 
 finnhubSubscriptions.forEach((subscriptionObject) => {
-  addSubscription(subscriptionObject.symbol);
+  FinnhubSocket.addSubscription(subscriptionObject.symbol);
 });
 
 type ExtendedHttpServer = http.Server & {

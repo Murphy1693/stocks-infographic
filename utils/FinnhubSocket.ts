@@ -23,19 +23,56 @@ type FinnhubMessage = {
   data?: { s: string; p: number }[];
 };
 
-export const addSubscription = (symbol: string) => {
-  finnhubConnection.then((connection: connection) => {
-    connection.send(JSON.stringify({ type: "subscribe", symbol: symbol }));
-  });
+// export const addSubscription = (symbol: string) => {
+//   finnhubConnection.then((connection: connection) => {
+//     connection.send(JSON.stringify({ type: "subscribe", symbol: symbol }));
+//   });
+// };
+
+// export const addMessageListener = (
+//   callback: (parsedMsg: FinnhubMessage) => void
+// ) => {
+//   finnhubConnection.then((connection: connection) => {
+//     connection.on("message", (msg) => {
+//       let parsedData = JSON.parse((msg as IUtf8Message).utf8Data);
+//       callback(parsedData);
+//     });
+//   });
+// };
+
+export type priceContainer = {
+  [key: string]: number;
 };
 
-export const addMessageListener = (
-  callback: (parsedMsg: FinnhubMessage) => void
-) => {
-  finnhubConnection.then((connection: connection) => {
-    connection.on("message", (msg) => {
-      let parsedData = JSON.parse((msg as IUtf8Message).utf8Data);
-      callback(parsedData);
+const payload: priceContainer = {};
+
+class FinnhubClient {
+  constructor() {}
+  payload: priceContainer = {};
+
+  addSubscription(symbol: string) {
+    finnhubConnection.then((connection: connection) => {
+      connection.send(JSON.stringify({ type: "subscribe", symbol: symbol }));
     });
-  });
-};
+  }
+
+  addMessageListener(callback: (parsedMsg: FinnhubMessage) => void) {
+    finnhubConnection.then((connection: connection) => {
+      connection.on("message", (msg) => {
+        let parsedData = JSON.parse((msg as IUtf8Message).utf8Data);
+        callback(parsedData);
+      });
+    });
+  }
+
+  getPayload() {
+    return this.payload;
+  }
+
+  alterPayload(symbol: string, price: number) {
+    this.payload[symbol] = price;
+  }
+}
+
+const FinnhubSocket = new FinnhubClient();
+export default FinnhubSocket;

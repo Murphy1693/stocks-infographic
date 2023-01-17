@@ -1,14 +1,20 @@
-import type { priceContainer } from './api/socket';
+import type { priceContainer } from '../utils/FinnhubSocket';
 import io from "socket.io-client";
 import Ticker from "./Ticker"
 import socketSubscription from "../utils/subscription";
 
+let socketInitialized = false;
+
 const socketInitializer = async () => {
-  await fetch("/api/socket");
+  if (socketInitialized) {
+    return
+  }
+  await fetch("http://localhost:3000/api/socket");
   const socket = io();
 
   socket.on("connect", () => {
     console.log("connected!");
+    socketInitialized = true;
   });
   socket.on("message", (payload:priceContainer) => {
     socketSubscription.dispatch(payload);
