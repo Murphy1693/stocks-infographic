@@ -1,12 +1,39 @@
 type finnhubSubscriptionObjects = {
-  symbol: string;
+  finnhub_symbol: string;
   display: string;
+  alpha_symbol: string;
+  crypto: boolean;
 };
 
 export const finnhubSubscriptions: finnhubSubscriptionObjects[] = [
-  { symbol: "BINANCE:BTCUSDT", display: "BTC" },
-  { symbol: "BINANCE:ETHUSDT", display: "ETH" },
-  { symbol: "BINANCE:DOGEUSDT", display: "DOGE" },
-  { symbol: "ASTS", display: "ASTS" },
-  { symbol: "AMZN", display: "AMZN" },
+  {
+    finnhub_symbol: "BINANCE:BTCUSDT",
+    display: "BTC",
+    alpha_symbol: "BTC",
+    crypto: true,
+  },
+  {
+    finnhub_symbol: "BINANCE:ETHUSDT",
+    display: "ETH",
+    alpha_symbol: "ETH",
+    crypto: true,
+  },
+  {
+    finnhub_symbol: "BINANCE:DOGEUSDT",
+    display: "DOGE",
+    alpha_symbol: "DOGE",
+    crypto: true,
+  },
+  {
+    finnhub_symbol: "ASTS",
+    display: "ASTS",
+    alpha_symbol: "ASTS",
+    crypto: false,
+  },
+  {
+    finnhub_symbol: "AMZN",
+    display: "AMZN",
+    alpha_symbol: "AMZN",
+    crypto: false,
+  },
 ];

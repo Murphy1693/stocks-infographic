@@ -13,7 +13,7 @@ const Ticker = ( {index, final}: TickerProps) => {
 
   return <div
   onClick={() => {
-    if (tickerObject.symbol === "BINANCE:BTCUSDT") {
+    if (tickerObject.finnhub_symbol === "BINANCE:BTCUSDT") {
       setTickerObject(finnhubSubscriptions[1])
     } else {
       setTickerObject(finnhubSubscriptions[0])
@@ -27,7 +27,7 @@ const Ticker = ( {index, final}: TickerProps) => {
 >
   <div className="flex justify-between">
     <span>{tickerObject.display}</span>
-    <TickerPrice symbol={tickerObject.symbol} index={index}></TickerPrice>
+    <TickerPrice symbol={tickerObject.finnhub_symbol} index={index}></TickerPrice>
   </div>
 </div>
 }

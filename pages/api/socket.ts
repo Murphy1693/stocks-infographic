@@ -13,11 +13,12 @@ FinnhubSocket.addMessageListener((msg) => {
   msg.data?.forEach((tradeInstance) => {
     FinnhubSocket.alterPayload(tradeInstance.s, tradeInstance.p);
   });
+  recordStocks(FinnhubSocket.getPayload(), 5);
   frontendSocket.emit("message", FinnhubSocket.getPayload());
 });
 
 finnhubSubscriptions.forEach((subscriptionObject) => {
-  FinnhubSocket.addSubscription(subscriptionObject.symbol);
+  FinnhubSocket.addSubscription(subscriptionObject.finnhub_symbol);
 });
 
 type ExtendedHttpServer = http.Server & {

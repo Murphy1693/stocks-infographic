@@ -7,6 +7,8 @@
   },
   "dependencies": {
     "@types/websocket": "^1.0.5",
+    "axios": "^1.2.2",
+    "mongoose": "^6.8.3",
     "next": "latest",
     "react": "18.2.0",
     "react-dom": "18.2.0",
