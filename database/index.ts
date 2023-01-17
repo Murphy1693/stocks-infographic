@@ -26,6 +26,7 @@ export const Closing =
       {
         symbol: { type: String, required: true, index: true },
         price: Number,
+        time: Number,
       },
       { timestamps: true }
     )

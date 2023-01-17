@@ -14,8 +14,12 @@ const recordClosingPrice = (symbol: string, crypto: boolean) => {
         let closing = new Closing({
           symbol,
           price: response.data.results[0].c,
+          time: response.data.results[0].t,
         });
         return closing.save();
+      })
+      .catch((err) => {
+        console.log(err);
       });
   } else {
     return axios
@@ -27,9 +31,13 @@ const recordClosingPrice = (symbol: string, crypto: boolean) => {
           let stock = new Closing({
             symbol,
             price: response.data.results[0].c,
+            time: response.data.results[0].t,
           });
           return stock.save();
         }
+      })
+      .catch((err) => {
+        console.log(err);
       });
   }
 };
