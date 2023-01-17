@@ -1,5 +1,5 @@
 import { create } from "domain";
-import type { priceContainer } from "../pages/api/socket";
+import type { priceContainer } from "./FinnhubSocket";
 
 type priceHandler = (price: number) => void;
 

@@ -9,19 +9,19 @@ export const finnhubSubscriptions: finnhubSubscriptionObjects[] = [
   {
     finnhub_symbol: "BINANCE:BTCUSDT",
     display: "BTC",
-    alpha_symbol: "BTC",
+    alpha_symbol: "BTCUSD",
     crypto: true,
   },
   {
     finnhub_symbol: "BINANCE:ETHUSDT",
     display: "ETH",
-    alpha_symbol: "ETH",
+    alpha_symbol: "ETHUSD",
     crypto: true,
   },
   {
     finnhub_symbol: "BINANCE:DOGEUSDT",
     display: "DOGE",
-    alpha_symbol: "DOGE",
+    alpha_symbol: "DOGEUSD",
     crypto: true,
   },
   {

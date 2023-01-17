@@ -1,6 +1,7 @@
 import FinnhubSocket, { priceContainer } from "./FinnhubSocket";
 import { finnhubSubscriptions } from "./finnhubSubscriptions";
 import { Closing, Current } from "../database";
+import { MongooseError } from "mongoose";
 
 const recentlySaved: { [key: string]: boolean } = {};
 
@@ -24,7 +25,8 @@ export const recordStocks = (payload: priceContainer, saveInterval: number) => {
             console.log(recentlySaved);
           }, saveInterval * 60 * 1000);
         })
-        .catch((err) => {
+        .catch((err: MongooseError) => {
+          console.log(err);
           recentlySaved[symbol] = false;
         });
     }

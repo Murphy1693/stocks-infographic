@@ -2,6 +2,7 @@ lockfileVersion: 5.4
 
 specifiers:
   '@types/node': 18.11.3
+  '@types/node-cron': ^3.0.7
   '@types/react': 18.0.21
   '@types/react-dom': 18.0.6
   '@types/websocket': ^1.0.5
@@ -9,6 +10,7 @@ specifiers:
   axios: ^1.2.2
   mongoose: ^6.8.3
   next: latest
+  node-cron: ^3.0.2
   postcss: ^8.4.18
   react: 18.2.0
   react-dom: 18.2.0
@@ -23,6 +25,7 @@ dependencies:
   axios: 1.2.2
   mongoose: 6.8.3
   next: 13.1.2_biqbaboplfbrettd7655fr4n2y
+  node-cron: 3.0.2
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
   socket.io: 4.5.4
@@ -31,6 +34,7 @@ dependencies:
 
 devDependencies:
   '@types/node': 18.11.3
+  '@types/node-cron': 3.0.7
   '@types/react': 18.0.21
   '@types/react-dom': 18.0.6
   autoprefixer: 10.4.13_postcss@8.4.21
@@ -1019,6 +1023,10 @@ packages:
       '@types/node': 18.11.3
     dev: false
 
+  /@types/node-cron/3.0.7:
+    resolution: {integrity: sha512-9PuLtBboc/+JJ7FshmJWv769gDonTpItN0Ol5TMwclpSQNjVyB2SRxSKBcTtbSysSL5R7Oea06kTTFNciCoYwA==}
+    dev: true
+
   /@types/node/18.11.3:
     resolution: {integrity: sha512-fNjDQzzOsZeKZu5NATgXUPsaFaTxeRgFXoosrHivTl8RGeV733OLawXsGfEk9a8/tySyZUyiZ6E8LcjPFZ2y1A==}
 
@@ -1692,6 +1700,13 @@ packages:
       - babel-plugin-macros
     dev: false
 
+  /node-cron/3.0.2:
+    resolution: {integrity: sha512-iP8l0yGlNpE0e6q1o185yOApANRe47UPbLf4YxfbiNHt/RU5eBcGB/e0oudruheSf+LQeDMezqC5BVAb5wwRcQ==}
+    engines: {node: '>=6.0.0'}
+    dependencies:
+      uuid: 8.3.2
+    dev: false
+
   /node-gyp-build/4.6.0:
     resolution: {integrity: sha512-NTZVKn9IylLwUzaKjkas1e4u2DLNcV4rdYagA4PWdPwW87Bi7z+BznyKSRwS/761tV/lzCGXplWsiaMjLqP2zQ==}
     hasBin: true
@@ -2103,7 +2118,6 @@ packages:
     resolution: {integrity: sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==}
     hasBin: true
     dev: false
-    optional: true
 
   /vary/1.1.2:
     resolution: {integrity: sha512-BNGbWLfd0eUPabhkXUVm0j8uuvREyTh5ovRa/dyow/BqAbZJyC+5fU+IzQOzmAKzYqYRAISoRhdQr3eIZ/PXqg==}
