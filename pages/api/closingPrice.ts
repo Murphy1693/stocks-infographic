@@ -5,7 +5,7 @@ const closingPriceHandler = async (
   req: NextApiRequest,
   res: NextApiResponse
 ) => {
-  Closing.find({ symbol: req.query.symbol })
+  await Closing.find({ alpha_symbol: req.query.alpha_symbol })
     .sort({ createdAt: -1 })
     .limit(1)
     .then((closingStocks) => {

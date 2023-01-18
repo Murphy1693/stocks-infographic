@@ -11,8 +11,10 @@ export const Current =
     new mongoose.Schema(
       {
         display: String,
-        symbol: { type: String, required: true, index: true },
+        alpha_symbol: String,
+        finnhub_symbol: { type: String, required: true, index: true },
         price: Number,
+        time: Number,
       },
       { timestamps: true }
     )
@@ -24,7 +26,9 @@ export const Closing =
     "Closing",
     new mongoose.Schema(
       {
-        symbol: { type: String, required: true, index: true },
+        display: String,
+        alpha_symbol: { type: String, required: true, index: true },
+        finnhub_symbol: String,
         price: Number,
         time: Number,
       },

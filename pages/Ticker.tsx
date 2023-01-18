@@ -2,10 +2,12 @@ import { useEffect, useState } from "react";
 import TickerPrice from "./TickerPrice";
 import { finnhubSubscriptions } from "../utils/finnhubSubscriptions";
 import axios from "axios";
+import { subscribable } from "../utils/subscription";
 
 type TickerProps = {
   index: number,
-  final?: boolean
+  final?: boolean,
+  tickerSubscriptions: subscribable
 }
 
 type closingStockShape = {
@@ -16,21 +18,22 @@ type closingStockShape = {
   updatedAt: Date,
 }
 
-const Ticker = ( {index, final}: TickerProps) => {
+const Ticker = ( {index, final, tickerSubscriptions}: TickerProps) => {
   const [tickerObject, setTickerObject] = useState(finnhubSubscriptions[index])
-  const [price, setPrice] = useState(0);
   const [closingPrice, setClosingPrice] = useState(0);
 
   useEffect(() => {
-    axios.get(`/api/closingPrice?symbol=${tickerObject.alpha_symbol}`).then((response) => {
+    axios.get(`/api/closingPrice?alpha_symbol=${tickerObject.alpha_symbol}`).then((response) => {
       let stocks:closingStockShape[] = response.data;
-      setClosingPrice(stocks[0].price)
+      if (stocks[0].price) {
+        setClosingPrice(stocks[0].price)
+      }
     })
-  })
+  }, [tickerObject.finnhub_symbol])
 
   return <div
   onClick={() => {
-    if (tickerObject.finnhub_symbol === "BINANCE:BTCUSDT") {
+    if (tickerObject === finnhubSubscriptions[0]) {
       setTickerObject(finnhubSubscriptions[1])
     } else {
       setTickerObject(finnhubSubscriptions[0])
@@ -44,7 +47,7 @@ const Ticker = ( {index, final}: TickerProps) => {
 >
   <div className="flex justify-between">
     <span>{tickerObject.display}</span>
-    <TickerPrice symbol={tickerObject.finnhub_symbol} index={index}></TickerPrice>
+    <TickerPrice tickerSubscriptions={tickerSubscriptions} symbol={tickerObject.finnhub_symbol} index={index} closingPrice={closingPrice}></TickerPrice>
   </div>
   <div>{closingPrice}</div>
 </div>

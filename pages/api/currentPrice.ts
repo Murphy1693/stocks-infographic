@@ -5,7 +5,7 @@ const currentPriceHandler = async (
   req: NextApiRequest,
   res: NextApiResponse
 ) => {
-  Current.find({ symbol: req.query.symbol })
+  await Current.find({ symbol: req.query.symbol })
     .then((stocks) => {
       res.send(stocks);
     })

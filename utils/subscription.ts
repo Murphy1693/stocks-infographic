@@ -12,18 +12,19 @@ type SubscriptionCallbacks = {
   [key: number]: subscriptionValue;
 };
 
-type subscribable = {
+export type subscribable = {
   subscribe: (cb: priceHandler, stock: string, index: number) => () => void;
   getPayloadPrice: (symbol: string) => number;
   dispatch: (payload: priceContainer) => void;
 };
 
-const createSubscribable: () => subscribable = () => {
+export const createSubscribable: () => subscribable = () => {
   const subscription: SubscriptionCallbacks = {};
   let payloadCopy: priceContainer = {};
 
   return {
     subscribe: (cb, symbol, index) => {
+      console.log(symbol, index);
       subscription[index] = { symbol: symbol, callback: cb };
       return () => {
         delete subscription[index];
@@ -35,7 +36,7 @@ const createSubscribable: () => subscribable = () => {
     },
 
     dispatch: (payload) => {
-      payloadCopy = payload;
+      payloadCopy = { ...payload };
       for (const index in subscription) {
         let symbol = subscription[index].symbol;
         let callback = subscription[index].callback;
@@ -46,7 +47,3 @@ const createSubscribable: () => subscribable = () => {
     },
   };
 };
-
-const socketSubscriptions = createSubscribable();
-
-export default socketSubscriptions;

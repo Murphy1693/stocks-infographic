@@ -14,7 +14,7 @@ export const recordStocks = (payload: priceContainer, saveInterval: number) => {
     if (recentlySaved[symbol] === false) {
       recentlySaved[symbol] = true;
       let currentStock = new Current({
-        symbol: symbol,
+        finnhub_symbol: symbol,
         price: payload[symbol],
       });
       currentStock

@@ -42,7 +42,7 @@ const recordClosingPrice = (symbol: string, crypto: boolean) => {
   }
 };
 
-const delay: (ms: number) => Promise<void> = (ms: number) => {
+const delay: (ms: number) => Promise<void> = (ms) => {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
       resolve();
@@ -53,7 +53,6 @@ const delay: (ms: number) => Promise<void> = (ms: number) => {
 finnhubSubscriptions.forEach(async (subObject, i) => {
   cron.schedule(`00 1,13 * * *`, async () => {
     await delay(i * 10000);
-    console.log("HITTING ALPHA API");
     recordClosingPrice(subObject.alpha_symbol, subObject.crypto)
       .then((stock) => {
         console.log(stock);
@@ -63,29 +62,6 @@ finnhubSubscriptions.forEach(async (subObject, i) => {
       });
   });
 });
-
-// cron.schedule("* 1 * * *", () => {
-//   console.log("SCHEDULED!");
-// });
-
-// let CLOSE_INTERVAL = false;
-// if (!CLOSE_INTERVAL) {
-//   CLOSE_INTERVAL = true;
-//   console.log("STARTING CLOSE INTERVAL");
-//   setInterval(() => {
-//     finnhubSubscriptions.forEach((subObject, i) => {
-//       setTimeout(() => {
-//         recordClosing(subObject.alpha_symbol, subObject.crypto)
-//           .then((stock) => {
-//             console.log(stock);
-//           })
-//           .catch((err) => {
-//             console.log(err);
-//           });
-//       }, i * 10000);
-//     });
-//   }, 60000);
-// }
 
 const CloseHandler = (req: NextApiRequest, res: NextApiResponse) => {
   res.end();

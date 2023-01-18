@@ -1,4 +1,8 @@
 import { client as Client, connection, IUtf8Message } from "websocket";
+import { Closing } from "../database";
+import "./cronjob";
+import { finnhubSubscriptions } from "./finnhubSubscriptions";
+
 const finnhubClient = new Client();
 
 const finnhubSocketPromise = (): Promise<connection> => {
@@ -47,7 +51,21 @@ export type priceContainer = {
 const payload: priceContainer = {};
 
 class FinnhubClient {
-  constructor() {}
+  constructor() {
+    Closing.find()
+      .sort({ time: -1 })
+      .then((stocks) => {
+        stocks = stocks.filter((stock, i) => {
+          return !stocks
+            .slice(0, i)
+            .map((s) => s.finnhub_symbol)
+            .includes(stock.finnhub_symbol);
+        });
+        stocks.forEach((stock) => {
+          this.alterPayload(stock.finnhub_symbol, stock.price);
+        });
+      });
+  }
   payload: priceContainer = {};
 
   addSubscription(symbol: string) {
@@ -74,5 +92,9 @@ class FinnhubClient {
   }
 }
 
-const FinnhubSocket = new FinnhubClient();
+let FinnhubSocket: FinnhubClient | undefined;
+
+if (!FinnhubSocket) {
+  FinnhubSocket = new FinnhubClient();
+}
 export default FinnhubSocket;

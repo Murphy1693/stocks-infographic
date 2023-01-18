@@ -1,18 +1,22 @@
 import { useState, useEffect } from "react";
-import socketSubscription from "../utils/subscription";
+import { subscribable } from "../utils/subscription";
 // import { payload } from "./api/socket";
 
 type TickerPriceProps = {
   symbol: string;
   index: number;
+  closingPrice: number,
+  tickerSubscriptions: subscribable
 }
 
-const TickerPrice = ( {symbol, index}: TickerPriceProps) => {
-  const [price, setPrice] = useState(0);
+const TickerPrice = ( {symbol, index, closingPrice, tickerSubscriptions}: TickerPriceProps) => {
+  const [price, setPrice] = useState(closingPrice);
 
   useEffect(() => {
-    setPrice(socketSubscription.getPayloadPrice(symbol));
-    socketSubscription.subscribe(setPrice, symbol, index);
+    if (tickerSubscriptions.getPayloadPrice(symbol)) {
+      setPrice(tickerSubscriptions.getPayloadPrice(symbol));
+    }
+    tickerSubscriptions?.subscribe(setPrice, symbol, index);
   }, [symbol]);
 
   return <div>{price}</div>

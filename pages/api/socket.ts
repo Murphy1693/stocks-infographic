@@ -1,7 +1,6 @@
 import { Server as SocketIOServer } from "socket.io";
 import { NextApiRequest, NextApiResponse } from "next";
 import { client, Message } from "websocket";
-import socketSubscriptions from "../../utils/subscription";
 import { finnhubSubscriptions } from "../../utils/finnhubSubscriptions";
 import http from "http";
 import { recordStocks } from "../../utils/recordStocks";
@@ -9,16 +8,16 @@ import FinnhubSocket from "../../utils/FinnhubSocket";
 
 const frontendSocket = new SocketIOServer();
 
-FinnhubSocket.addMessageListener((msg) => {
+FinnhubSocket!.addMessageListener((msg) => {
   msg.data?.forEach((tradeInstance) => {
-    FinnhubSocket.alterPayload(tradeInstance.s, tradeInstance.p);
+    FinnhubSocket?.alterPayload(tradeInstance.s, tradeInstance.p);
   });
-  recordStocks(FinnhubSocket.getPayload(), 5);
-  frontendSocket.emit("message", FinnhubSocket.getPayload());
+  recordStocks(FinnhubSocket!.getPayload(), 5);
+  frontendSocket.emit("message", FinnhubSocket!.getPayload());
 });
 
 finnhubSubscriptions.forEach((subscriptionObject) => {
-  FinnhubSocket.addSubscription(subscriptionObject.finnhub_symbol);
+  FinnhubSocket!.addSubscription(subscriptionObject.finnhub_symbol);
 });
 
 type ExtendedHttpServer = http.Server & {
