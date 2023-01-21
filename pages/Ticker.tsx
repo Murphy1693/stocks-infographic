@@ -21,6 +21,7 @@ type closingStockShape = {
 const Ticker = ( {index, final, tickerSubscriptions}: TickerProps) => {
   const [tickerObject, setTickerObject] = useState(finnhubSubscriptions[index])
   const [closingPrice, setClosingPrice] = useState(0);
+  const [selectState, setSelectState] = useState(0);
 
   useEffect(() => {
     axios.get(`/api/closingPrice?alpha_symbol=${tickerObject.alpha_symbol}`).then((response) => {
@@ -33,16 +34,27 @@ const Ticker = ( {index, final, tickerSubscriptions}: TickerProps) => {
 
   return <div
   onClick={() => {
-    if (tickerObject === finnhubSubscriptions[0]) {
-      setTickerObject(finnhubSubscriptions[1])
+    // if (tickerObject === finnhubSubscriptions[0]) {
+    //   setTickerObject(finnhubSubscriptions[1])
+    // } else {
+    //   setTickerObject(finnhubSubscriptions[0])
+    // }
+    if (selectState === 0) {
+      setSelectState(1);
     } else {
-      setTickerObject(finnhubSubscriptions[0])
+      setSelectState(0);
     }
   }}
   className={
-    final
-      ? "relative text-white h-full w-1/5 p-4 min-w-[168px]"
-      : "relative text-white h-full w-1/5 border-r border-zinc-600 p-4 min-w-[168px]"
+    // selectState ?
+    // "relative text-white h-full w-1/5 p-4 min-w-[168px] shadow-[inset_0px_0px_20px_4px_rgba(239,68,222,0.3),_0px_0px_20px_4px_rgba(239,68,222,0.3)]" :
+    // "relative text-white h-full w-1/5 border-r border-zinc-600 p-4 min-w-[168px]"
+    selectState ?
+    "relative text-white h-full w-1/5 p-4 min-w-[168px] border-b-2 border-[#9a5493]" :
+    "relative text-white h-full w-1/5 border-r border-zinc-600 p-4 min-w-[168px] border-b-2 border-transparent"
+  //   final
+  //     ? "relative text-white h-full w-1/5 p-4 min-w-[168px] shadow-[inset_-5px_0px_20px_4px_rgba(255,0,0,0.3)]"
+  //     : "relative text-white h-full w-1/5 border-r border-zinc-600 p-4 min-w-[168px]"
   }
 >
   <div className="flex justify-between">
@@ -50,6 +62,8 @@ const Ticker = ( {index, final, tickerSubscriptions}: TickerProps) => {
     <TickerPrice tickerSubscriptions={tickerSubscriptions} symbol={tickerObject.finnhub_symbol} index={index} closingPrice={closingPrice}></TickerPrice>
   </div>
   <div>{closingPrice}</div>
+  {/* {selectState === 1 ? <div className="flex justify-end text-sm text-yellow-200">Hello</div>: null} */}
+  <div></div>
 </div>
 }
 

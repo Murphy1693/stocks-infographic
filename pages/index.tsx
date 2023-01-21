@@ -2,7 +2,9 @@ import type { priceContainer } from '../utils/FinnhubSocket';
 import io from "socket.io-client";
 import Ticker from "./Ticker"
 import { subscribable, createSubscribable } from '../utils/subscription';
-import { useEffect, useMemo, useState, createContext } from 'react';
+import { useEffect, useMemo, useState, createContext, useRef } from 'react';
+import LineGraph, { options, aapl } from "./../graph"
+import { sampleData } from '../data/sample_graph';
 
 let fetchSocket = async (subscription: subscribable) => {
   await fetch("http://localhost:3000/api/socket")
@@ -18,9 +20,16 @@ let fetchSocket = async (subscription: subscribable) => {
 
 const socketSubscription = createSubscribable();
 
+let newOptions = {...options}
+newOptions.x = (d: any) => d.x;
+newOptions.y = (d: any) => d.y;
+
 const Home = () => {
+  const graphRef = useRef(null);
   useEffect(() => {
     fetchSocket(socketSubscription);
+    options.color = "#9a5493";
+    LineGraph(graphRef.current, sampleData, newOptions)
   }, []);
 
   return (
@@ -32,6 +41,7 @@ const Home = () => {
       <Ticker index={3} key={3} tickerSubscriptions={socketSubscription}></Ticker>
       <Ticker index={4} key={4} tickerSubscriptions={socketSubscription}></Ticker>
       </div>
+      <div className="flex items-center" ref={graphRef}></div>
     </div>)
 
 }
