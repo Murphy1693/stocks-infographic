@@ -5,6 +5,7 @@ import { subscribable, createSubscribable } from '../utils/subscription';
 import { useEffect, useMemo, useState, createContext, useRef } from 'react';
 import LineGraph, { options, aapl } from "./../graph"
 import { sampleData } from '../data/sample_graph';
+import Graph from "./Graph"
 
 let fetchSocket = async (subscription: subscribable) => {
   await fetch("http://localhost:3000/api/socket")
@@ -21,15 +22,15 @@ let fetchSocket = async (subscription: subscribable) => {
 const socketSubscription = createSubscribable();
 
 let newOptions = {...options}
-newOptions.x = (d: any) => d.x;
-newOptions.y = (d: any) => d.y;
+newOptions.x = (d: any) => new Date(d.date);
+newOptions.y = (d: any) => d.close;
 
 const Home = () => {
   const graphRef = useRef(null);
   useEffect(() => {
     fetchSocket(socketSubscription);
     options.color = "#9a5493";
-    LineGraph(graphRef.current, sampleData, newOptions)
+    // LineGraph(graphRef.current, sampleData, newOptions)
   }, []);
 
   return (
@@ -41,7 +42,8 @@ const Home = () => {
       <Ticker index={3} key={3} tickerSubscriptions={socketSubscription}></Ticker>
       <Ticker index={4} key={4} tickerSubscriptions={socketSubscription}></Ticker>
       </div>
-      <div className="flex items-center" ref={graphRef}></div>
+      <Graph></Graph>
+      {/* <div ref={graphRef}></div> */}
     </div>)
 
 }

@@ -1,14 +1,38 @@
-import pg from "pg";
+import { pool } from ".";
 
 type SQLSchema = {
   finnhub_symbol: string;
   alpha_symbol: string;
-  price: number;
+  price?: number;
   display: string;
   time: null | number;
   closing_price?: number;
 };
 
-export const insertClosing = (obj: SQLSchema) => {};
+export const insertCurrent: (obj: SQLSchema) => Promise<any> = ({
+  display,
+  alpha_symbol,
+  finnhub_symbol,
+  price,
+}) =>
+  pool.query(
+    `INSERT INTO current_prices (display, alpha_symbol, finnhub_symbol, price) VALUES ($1, $2, $3, $4)`,
+    [display, alpha_symbol, finnhub_symbol, price]
+  );
 
-export const insertCurrent = (obj: SQLSchema) => {};
+export const insertClosing: (obj: SQLSchema) => Promise<any> = ({
+  display,
+  alpha_symbol,
+  finnhub_symbol,
+  closing_price,
+  time,
+}) =>
+  pool.query(
+    `INSERT INTO current_prices (display, alpha_symbol, finnhub_symbol, closing_price, time) VALUES ($1, $2, $3, $4, $5)`,
+    [display, alpha_symbol, finnhub_symbol, closing_price, time]
+  );
+// export const insertClosing = (obj: SQLSchema) => {
+//   pool.query(insertQuery, )
+// };
+
+// export const insertCurrent = (obj: SQLSchema) => {};

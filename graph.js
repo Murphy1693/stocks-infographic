@@ -105,8 +105,9 @@ const LineGraph = (
     );
 
   const p = d3.line()([
-    [marginLeft - 5, height - 30],
-    [width - 30, marginTop + 30],
+    [marginLeft, height - 30],
+    [width - 30, marginTop],
+    [marginLeft, marginTop],
   ]);
 
   svg
@@ -115,7 +116,7 @@ const LineGraph = (
     .attr("stroke-linecap", strokeLinecap)
     .attr("stroke-linejoin", strokeLinejoin)
     .attr("stroke-opacity", strokeOpacity)
-    .attr("d", p)
+    .attr("d", line(I))
     .attr("fill", "none")
     .attr("stroke", color);
 
@@ -129,12 +130,13 @@ export let aapl = [
 ];
 
 export const options = {
-  x: (d) => d.date,
+  x: (d) => new Date(d.date),
   y: (d) => d.close,
   yLabel: "↑ Daily close ($)",
   width: 1200,
   height: 500,
   color: "steelblue",
+  color: "#9a5493",
 };
 
 // const LineChart1 = (container) => {
