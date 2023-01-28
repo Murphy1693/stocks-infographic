@@ -20,6 +20,7 @@ const LineGraph = (
     height = 400,
     xType = d3.scaleUtc,
     xDomain,
+    title,
     xRange = [marginLeft, width - marginRight],
     yType = d3.scaleLinear,
     yDomain,
@@ -47,7 +48,7 @@ const LineGraph = (
     console.log(xDomain);
   }
   if (yDomain === undefined) {
-    yDomain = [d3.min(Y), d3.max(Y)];
+    yDomain = [0, d3.max(Y)];
   }
 
   const xScale = xType(xDomain, xRange);
@@ -102,6 +103,16 @@ const LineGraph = (
         .attr("fill", "white")
         .attr("text-anchor", "start")
         .text(yLabel)
+    )
+    .call((g) =>
+      g
+        .append("text")
+        .attr("x", width / 2 - marginLeft)
+        .attr("y", 20)
+        .attr("fill", "white")
+        .attr("text-anchor", "start")
+        .text(title ? title : "")
+        .style("font-size", "16px")
     );
 
   const p = d3.line()([
@@ -120,6 +131,7 @@ const LineGraph = (
     .attr("fill", "none")
     .attr("stroke", color);
 
+  container.innerHTML = "";
   container.append(svg.node());
 };
 

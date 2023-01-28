@@ -1,15 +1,22 @@
 import { useEffect, useRef, useState } from "react"
 import LineGraph, { options } from "../graph";
 import axios from "axios";
+import { graphSubscribable, subscribable } from "../utils/subscription";
 
-const Graph = () => {
-  const [symbol, setSymbol] = useState("ASTS");
+type GraphProps = {
+  graphSubscription: graphSubscribable
+}
+
+const Graph = ({graphSubscription}: GraphProps) => {
+  const [symbol, setSymbol] = useState("TSLA");
   // const [graphData, setGraphData] = useState([]);
   const graphRef = useRef(null);
 
   useEffect(() => {
-    axios.get(`/api/yahooPrices?symbol=${symbol}`).then((response) => {
-      LineGraph(graphRef.current, response.data, options)
+    graphSubscription.subscribe(setSymbol);
+    axios.get(`/api/closingPrice?alpha_symbol=${symbol}`).then((response) => {
+      console.log(response.data);
+      LineGraph(graphRef.current, response.data.results, {...options, title: response.data.name, yDomain: [0, (1.2 * response.data.max)]})
     })
   }, [symbol])
   return <div onClick={() => {

@@ -1,5 +1,9 @@
 import { create } from "domain";
 import type { priceContainer } from "./FinnhubSocket";
+import {
+  finnhubSubscriptionObjects,
+  finnhubSubscriptions,
+} from "./finnhubSubscriptions";
 
 type priceHandler = (price: number) => void;
 
@@ -16,6 +20,35 @@ export type subscribable = {
   subscribe: (cb: priceHandler, stock: string, index: number) => () => void;
   getPayloadPrice: (symbol: string) => number;
   dispatch: (payload: priceContainer) => void;
+};
+
+export type graphSubscribable = {
+  subscribe: (cb: (symbol: string) => void) => void;
+  dispatch: (symbol: string, tickerObject: finnhubSubscriptionObjects) => void;
+  addTicker: (cb: (number: 0 | 1) => void) => void;
+};
+
+export type tickerSetterProps = (arg: 0 | 1) => void[];
+
+export const createGraphSubscribable: () => graphSubscribable = () => {
+  let graphCallback = (symbol: string) => {};
+  let tickerSetters = {};
+  return {
+    subscribe: (cb) => {
+      graphCallback = cb;
+    },
+    dispatch: (symbol, tickerObject) => {
+      graphCallback(symbol);
+      for (let k in tickerSetters) {
+        if (symbol !== k) {
+          tickerSetters[k](0);
+        }
+      }
+    },
+    addTicker: (cb, symbol) => {
+      tickerSetters[symbol] = cb;
+    },
+  };
 };
 
 export const createSubscribable: () => subscribable = () => {

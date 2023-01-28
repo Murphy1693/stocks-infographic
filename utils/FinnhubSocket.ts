@@ -84,7 +84,7 @@ class FinnhubClient {
   }
 
   getPayload() {
-    return this.payload;
+    return { ...this.payload };
   }
 
   alterPayload(symbol: string, price: number) {

@@ -1,7 +1,7 @@
 import type { priceContainer } from '../utils/FinnhubSocket';
 import io from "socket.io-client";
 import Ticker from "./Ticker"
-import { subscribable, createSubscribable } from '../utils/subscription';
+import { subscribable, createSubscribable, createGraphSubscribable } from '../utils/subscription';
 import { useEffect, useMemo, useState, createContext, useRef } from 'react';
 import LineGraph, { options, aapl } from "./../graph"
 import { sampleData } from '../data/sample_graph';
@@ -20,6 +20,7 @@ let fetchSocket = async (subscription: subscribable) => {
 }
 
 const socketSubscription = createSubscribable();
+const graphSubscription = createGraphSubscribable();
 
 let newOptions = {...options}
 newOptions.x = (d: any) => new Date(d.date);
@@ -36,13 +37,13 @@ const Home = () => {
   return (
     <div className="h-screen bg-slate-800 ">
       <div className="flex items-center h-20 bg-gradient-to-t from-slate-900 to-slate-700">
-      <Ticker index={0} key={0} tickerSubscriptions={socketSubscription}></Ticker>
-      <Ticker index={1} key={1} tickerSubscriptions={socketSubscription}></Ticker>
-      <Ticker index={2} key={2} tickerSubscriptions={socketSubscription}></Ticker>
-      <Ticker index={3} key={3} tickerSubscriptions={socketSubscription}></Ticker>
-      <Ticker index={4} key={4} tickerSubscriptions={socketSubscription}></Ticker>
+      <Ticker index={0} key={0} tickerSubscriptions={socketSubscription} graphSubscription={graphSubscription}></Ticker>
+      <Ticker index={1} key={1} tickerSubscriptions={socketSubscription} graphSubscription={graphSubscription}></Ticker>
+      <Ticker index={5} key={2} tickerSubscriptions={socketSubscription} graphSubscription={graphSubscription}></Ticker>
+      <Ticker index={3} key={3} tickerSubscriptions={socketSubscription} graphSubscription={graphSubscription}></Ticker>
+      <Ticker index={4} key={4} tickerSubscriptions={socketSubscription} graphSubscription={graphSubscription}></Ticker>
       </div>
-      <Graph></Graph>
+      <Graph graphSubscription={graphSubscription}></Graph>
       {/* <div ref={graphRef}></div> */}
     </div>)
 

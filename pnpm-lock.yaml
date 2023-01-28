@@ -3,6 +3,7 @@ lockfileVersion: 5.4
 specifiers:
   '@types/node': 18.11.3
   '@types/node-cron': ^3.0.7
+  '@types/pg': ^8.6.6
   '@types/react': 18.0.21
   '@types/react-dom': 18.0.6
   '@types/websocket': ^1.0.5
@@ -24,6 +25,7 @@ specifiers:
   yahoo-finance: ^0.3.8
 
 dependencies:
+  '@types/pg': 8.6.6
   '@types/websocket': 1.0.5
   axios: 1.2.2
   d3: 7.8.2
@@ -1035,6 +1037,14 @@ packages:
 
   /@types/node/18.11.3:
     resolution: {integrity: sha512-fNjDQzzOsZeKZu5NATgXUPsaFaTxeRgFXoosrHivTl8RGeV733OLawXsGfEk9a8/tySyZUyiZ6E8LcjPFZ2y1A==}
+
+  /@types/pg/8.6.6:
+    resolution: {integrity: sha512-O2xNmXebtwVekJDD+02udOncjVcMZQuTEQEMpKJ0ZRf5E7/9JJX3izhKUcUifBkyKpljyUM6BTgy2trmviKlpw==}
+    dependencies:
+      '@types/node': 18.11.3
+      pg-protocol: 1.5.0
+      pg-types: 2.2.0
+    dev: false
 
   /@types/prop-types/15.7.5:
     resolution: {integrity: sha512-JCB8C6SnDoQf0cNycqd/35A7MjcnK+ZTqE7judS6o7utxUCg6imJg3QK2qzHKszlTjcj2cn+NwMB2i96ubpj7w==}

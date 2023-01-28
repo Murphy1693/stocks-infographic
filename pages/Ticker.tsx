@@ -2,12 +2,13 @@ import { useEffect, useState } from "react";
 import TickerPrice from "./TickerPrice";
 import { finnhubSubscriptions } from "../utils/finnhubSubscriptions";
 import axios from "axios";
-import { subscribable } from "../utils/subscription";
+import { graphSubscribable, subscribable } from "../utils/subscription";
 
 type TickerProps = {
   index: number,
   final?: boolean,
   tickerSubscriptions: subscribable
+  graphSubscription: graphSubscribable
 }
 
 type closingStockShape = {
@@ -18,19 +19,29 @@ type closingStockShape = {
   updatedAt: Date,
 }
 
-const Ticker = ( {index, final, tickerSubscriptions}: TickerProps) => {
+const Ticker = ( {index, final, tickerSubscriptions, graphSubscription}: TickerProps) => {
   const [tickerObject, setTickerObject] = useState(finnhubSubscriptions[index])
   const [closingPrice, setClosingPrice] = useState(0);
   const [selectState, setSelectState] = useState(0);
 
   useEffect(() => {
-    axios.get(`/api/closingPrice?alpha_symbol=${tickerObject.alpha_symbol}`).then((response) => {
-      let stocks:closingStockShape[] = response.data;
-      if (stocks[0].price) {
-        setClosingPrice(stocks[0].price)
-      }
-    })
-  }, [tickerObject.finnhub_symbol])
+    graphSubscription.addTicker(setSelectState, tickerObject.alpha_symbol)
+  }, [])
+
+  useEffect(() => {
+    if (selectState === 1) {
+      graphSubscription.dispatch(tickerObject.alpha_symbol, tickerObject);
+    }
+  }, [selectState])
+
+  // useEffect(() => {
+  //   axios.get(`/api/closingPrice?alpha_symbol=${tickerObject.alpha_symbol}`).then((response) => {
+  //     let stocks:closingStockShape[] = response.data;
+  //     if (stocks[0].price) {
+  //       setClosingPrice(stocks[0].price)
+  //     }
+  //   })
+  // }, [tickerObject.finnhub_symbol])
 
   return <div
   onClick={() => {

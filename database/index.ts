@@ -6,7 +6,7 @@ export const pool = new Pool({
   host: process.env.HOST,
   database: process.env.DB_NAME,
   password: process.env.DB_PASS,
-  port: process.env.PORT,
+  port: process.env.DB_PORT,
 });
 
 mongoose.connect("mongodb://127.0.0.1:27017/stocks").then(() => {
