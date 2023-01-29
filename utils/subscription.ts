@@ -22,17 +22,19 @@ export type subscribable = {
   dispatch: (payload: priceContainer) => void;
 };
 
+export type tickerSelectSetter = (number: 0 | 1) => void;
+
 export type graphSubscribable = {
   subscribe: (cb: (symbol: string) => void) => void;
   dispatch: (symbol: string, tickerObject: finnhubSubscriptionObjects) => void;
-  addTicker: (cb: (number: 0 | 1) => void) => void;
+  addTicker: (cb: tickerSelectSetter, symbol: string) => void;
 };
 
-export type tickerSetterProps = (arg: 0 | 1) => void[];
+export type tickerSetterProps = { (data: 0 | 1): void };
 
 export const createGraphSubscribable: () => graphSubscribable = () => {
   let graphCallback = (symbol: string) => {};
-  let tickerSetters = {};
+  let tickerSetters: { [key: string]: tickerSelectSetter } = {};
   return {
     subscribe: (cb) => {
       graphCallback = cb;
@@ -45,7 +47,7 @@ export const createGraphSubscribable: () => graphSubscribable = () => {
         }
       }
     },
-    addTicker: (cb, symbol) => {
+    addTicker: (cb: tickerSelectSetter, symbol: string) => {
       tickerSetters[symbol] = cb;
     },
   };

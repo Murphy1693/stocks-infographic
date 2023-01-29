@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react"
 import LineGraph, { options } from "../graph";
 import axios from "axios";
 import { graphSubscribable, subscribable } from "../utils/subscription";
+import GraphSettings from "./GraphSettings";
 
 type GraphProps = {
   graphSubscription: graphSubscribable
@@ -19,9 +20,11 @@ const Graph = ({graphSubscription}: GraphProps) => {
       LineGraph(graphRef.current, response.data.results, {...options, title: response.data.name, yDomain: [0, (1.2 * response.data.max)]})
     })
   }, [symbol])
-  return <div onClick={() => {
-    setSymbol("AMZN");
-  }} className="flex items-center" ref={graphRef}></div>
+  return <div className="flex pt-4 justify-center">
+    <div ref={graphRef}>
+    </div>
+  <GraphSettings></GraphSettings>
+  </div>
 }
 
 export default Graph;

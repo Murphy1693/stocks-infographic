@@ -30,8 +30,7 @@ const Home = () => {
   const graphRef = useRef(null);
   useEffect(() => {
     fetchSocket(socketSubscription);
-    options.color = "#9a5493";
-    // LineGraph(graphRef.current, sampleData, newOptions)
+
   }, []);
 
   return (

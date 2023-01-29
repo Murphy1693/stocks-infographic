@@ -52,8 +52,6 @@ const Ticker = ( {index, final, tickerSubscriptions, graphSubscription}: TickerP
     // }
     if (selectState === 0) {
       setSelectState(1);
-    } else {
-      setSelectState(0);
     }
   }}
   className={
