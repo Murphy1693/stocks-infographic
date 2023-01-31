@@ -32,7 +32,8 @@ const LineGraph = (
     strokeLinejoin = "round",
     strokeWidth = 5,
     strokeOpacity = 1,
-  } = {}
+  } = {},
+  windowWidth = 1200
 ) => {
   const X = d3.map(data, x);
   const Y = d3.map(data, y);
@@ -50,13 +51,19 @@ const LineGraph = (
     yDomain = [0, d3.max(Y)];
   }
 
+  let media = false;
+  // console.log(d3.select(container).style("width"));
+  if (windowWidth < 600) {
+    console.log("TRUE MEDIA");
+    media = true;
+  }
   const xScale = xType(xDomain, xRange);
   const yScale = yType(yDomain, yRange);
+  console.log(xScale);
   const xAxis = d3
     .axisBottom(xScale)
-    .ticks(width / 80)
+    .ticks(media ? width / 160 : width / 80)
     .tickSizeOuter(0);
-  // .attr("style", "font-size: 100px;");
   const yAxis = d3.axisLeft(yScale).ticks(height / 40, yFormat);
 
   const line = d3
@@ -75,17 +82,24 @@ const LineGraph = (
       "style",
       "max-width: 100%; height: auto; height: intrinsic; margin: auto; color: rgb(255, 255, 255, 1);"
     );
-
+  // console.log(container);
+  // console.log(container.offsetWidth);
+  // console.log(svg.call(xAxis));
   svg
     .append("g")
     .attr("transform", `translate(0,${height - marginBottom})`)
     .call(xAxis)
-    .attr("style", "@media (400px) { font-size: 100px; }");
+    .attr("font-size", () => {
+      return media ? "25px" : "10px";
+    });
 
   svg
     .append("g")
     .attr("transform", `translate(${marginLeft},0)`)
     .call(yAxis)
+    .attr("font-size", () => {
+      return media ? "25px" : "10px";
+    })
     .call((g) => g.select(".domain").remove())
     .call((g) =>
       g
@@ -132,6 +146,30 @@ const LineGraph = (
     .attr("fill", "none")
     .attr("stroke", color);
 
+  d3.select(window).on("resize", function () {
+    if (parseInt(d3.select("svg").style("width")) > 600) {
+      d3.selectAll(".tick").select("text").style("font-size", "10px");
+    } else {
+      media = true;
+      const newWidth = d3.select("svg").style("width");
+      const newFontSize = Math.min(10 * (800 / parseInt(newWidth)), 25);
+      console.log(newFontSize);
+      d3.selectAll(".tick").select("text").style("font-size", newFontSize);
+    }
+  });
+  // const newWidth = svg.style("width") || 14;
+  // const newFontSize = 10 * (800 / parseInt(newWidth));
+  // console.log(newFontSize);
+  // d3.selectAll(".tick").select("text").style("font-size", newFontSize);
+
+  // if (media) {
+  //   d3.selectAll(".tick")
+  //     .select("text")
+  //     .style("font-size", (d, i) => {
+  //       console.log(d);
+  //       return i % 2 === 0 ? "14px" : "40px";
+  //     });
+  // }
   container.innerHTML = "";
   container.append(svg.node());
 };
