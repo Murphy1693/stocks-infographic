@@ -59,7 +59,6 @@ export const createSubscribable: () => subscribable = () => {
 
   return {
     subscribe: (cb, symbol, index) => {
-      console.log(symbol, index);
       subscription[index] = { symbol: symbol, callback: cb };
       return () => {
         delete subscription[index];

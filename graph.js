@@ -37,7 +37,6 @@ const LineGraph = (
   const X = d3.map(data, x);
   const Y = d3.map(data, y);
   const I = d3.range(X.length);
-  console.log("I", I);
   if (defined === undefined) {
     defined = (d, i) => !isNaN(X[i]) && !isNaN(Y[i]);
   }
@@ -57,6 +56,7 @@ const LineGraph = (
     .axisBottom(xScale)
     .ticks(width / 80)
     .tickSizeOuter(0);
+  // .attr("style", "font-size: 100px;");
   const yAxis = d3.axisLeft(yScale).ticks(height / 40, yFormat);
 
   const line = d3
@@ -66,7 +66,6 @@ const LineGraph = (
     .x((i) => xScale(X[i]))
     .y((i) => yScale(Y[i]));
 
-  console.log("called from client");
   let svg = d3
     .create("svg")
     .attr("width", width)
@@ -74,13 +73,14 @@ const LineGraph = (
     .attr("viewBox", [0, 0, width, height])
     .attr(
       "style",
-      "max-width: 100%; height: auto; height: intrinsic; margin: auto; padding-top: 2rem; color: rgb(255, 255, 255, 0.5);"
+      "max-width: 100%; height: auto; height: intrinsic; margin: auto; color: rgb(255, 255, 255, 1);"
     );
 
   svg
     .append("g")
     .attr("transform", `translate(0,${height - marginBottom})`)
-    .call(xAxis);
+    .call(xAxis)
+    .attr("style", "@media (400px) { font-size: 100px; }");
 
   svg
     .append("g")
@@ -104,15 +104,16 @@ const LineGraph = (
         .attr("text-anchor", "start")
         .text(yLabel)
     )
-    .call((g) =>
-      g
-        .append("text")
-        .attr("x", width / 2 - marginLeft)
-        .attr("y", 20)
-        .attr("fill", "white")
-        .attr("text-anchor", "start")
-        .text(title ? title : "")
-        .style("font-size", "16px")
+    .call(
+      (g) =>
+        g
+          .append("text")
+          .attr("x", width / 2 - marginLeft)
+          .attr("y", 20)
+          .attr("fill", "white")
+          .attr("text-anchor", "start")
+      // .text(title ? title : "")
+      // .style("font-size", "16px")
     );
 
   const p = d3.line()([
@@ -143,12 +144,13 @@ export let aapl = [
 
 export const options = {
   x: (d) => new Date(d.date),
-  y: (d) => d.close,
+  y: (d) => d.price,
   yLabel: "↑ Daily close ($)",
   width: 1200,
   height: 500,
-  color: "steelblue",
-  color: "#9a5493",
+  // color: "steelblue",
+  // color: "#9a5493",
+  color: "rgb(192 132 252)",
 };
 
 // const LineChart1 = (container) => {

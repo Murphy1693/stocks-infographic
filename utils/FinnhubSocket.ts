@@ -1,5 +1,6 @@
 import { client as Client, connection, IUtf8Message } from "websocket";
 import { Closing } from "../database";
+import { selectAllMostCurrent } from "../database/models";
 import "./cronjob";
 import { finnhubSubscriptions } from "./finnhubSubscriptions";
 
@@ -50,21 +51,22 @@ export type priceContainer = {
 
 const payload: priceContainer = {};
 
+type AllMostCurrentQueryObj = {
+  price: number;
+  stock_id: number;
+  display: string;
+  finnhub_symbol: string;
+  time: string;
+};
+
 class FinnhubClient {
   constructor() {
-    Closing.find()
-      .sort({ time: -1 })
-      .then((stocks) => {
-        stocks = stocks.filter((stock, i) => {
-          return !stocks
-            .slice(0, i)
-            .map((s) => s.finnhub_symbol)
-            .includes(stock.finnhub_symbol);
-        });
-        stocks.forEach((stock) => {
-          this.alterPayload(stock.finnhub_symbol, stock.price);
-        });
+    selectAllMostCurrent().then((queryResult) => {
+      let current_prices: AllMostCurrentQueryObj[] = queryResult.rows;
+      current_prices.forEach((priceObj) => {
+        this.alterPayload(priceObj.finnhub_symbol, priceObj.price);
       });
+    });
   }
   payload: priceContainer = {};
 

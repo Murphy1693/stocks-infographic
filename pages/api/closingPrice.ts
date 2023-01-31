@@ -16,8 +16,10 @@ const closingPriceHandler = async (
   //   .catch((err) => {
   //     res.status(500).end();
   //   });
+  console.log(req.query.time);
+  console.log(req.query);
   if (req.query.alpha_symbol !== undefined) {
-    await selectClosing(req.query.alpha_symbol)
+    await selectClosing(req.query.alpha_symbol, req.query.time)
       .then((queryResult) => {
         res.json(queryResult.rows[0].data);
       })

@@ -1,16 +1,18 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { Current } from "../../database";
+import { selectCurrent } from "../../database/models";
 
 const currentPriceHandler = async (
   req: NextApiRequest,
   res: NextApiResponse
 ) => {
-  await Current.find({ finnhub_symbol: req.query.symbol })
-    .then((stocks) => {
-      res.send(stocks);
+  await selectCurrent(req.query.finnhub_symbol)
+    .then((queryResult) => {
+      console.log(queryResult);
+      res.json(queryResult.rows[0].data);
     })
     .catch((err) => {
-      res.status(500).end();
+      console.log(err);
     });
 };
 

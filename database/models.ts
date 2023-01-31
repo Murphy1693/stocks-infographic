@@ -1,5 +1,12 @@
 import { pool } from ".";
-import { closingQuery } from "./queryStrings";
+import {
+  insertCurrentQuery,
+  selectAllMostCurrentQuery,
+  selectAllMostRecentCloseQuery,
+  selectClosingQuery,
+  selectCurrentQuery,
+  selectMostRecentCloseQuery,
+} from "./queryStrings";
 
 type SQLSchema = {
   finnhub_symbol: string;
@@ -10,35 +17,34 @@ type SQLSchema = {
   closing_price?: number;
 };
 
-export const insertCurrent: (obj: SQLSchema) => Promise<any> = ({
-  display,
-  alpha_symbol,
-  finnhub_symbol,
-  price,
-}) =>
-  pool.query(
-    `INSERT INTO current_prices (display, alpha_symbol, finnhub_symbol, price) VALUES ($1, $2, $3, $4)`,
-    [display, alpha_symbol, finnhub_symbol, price]
-  );
-
-export const insertClosing: (obj: SQLSchema) => Promise<any> = ({
-  display,
-  alpha_symbol,
-  finnhub_symbol,
-  closing_price,
-  time,
-}) => {
-  return pool.query(
-    `INSERT INTO current_prices (display, alpha_symbol, finnhub_symbol, closing_price, time) VALUES ($1, $2, $3, $4, $5)`,
-    [display, alpha_symbol, finnhub_symbol, closing_price, time]
-  );
+export const selectClosing: (symbol: string, time: string) => Promise<any> = (
+  symbol,
+  time
+) => {
+  return pool.query(selectClosingQuery, [symbol, parseInt(time)]);
 };
 
-export const selectClosing: (symbol: string) => Promise<any> = (symbol) => {
-  return pool.query(closingQuery, [symbol]);
+export const insertCurrent: (symbol: string, price: number) => Promise<any> = (
+  symbol,
+  price
+) => {
+  return pool.query(insertCurrentQuery, [symbol, price]);
 };
-// export const insertClosing = (obj: SQLSchema) => {
-//   pool.query(insertQuery, )
-// };
 
-// export const insertCurrent = (obj: SQLSchema) => {};
+export const selectCurrent: (symbol: string) => Promise<any> = (symbol) => {
+  return pool.query(selectCurrentQuery, [symbol]);
+};
+
+export const selectMostRecentClose: (alpha_symbol: string) => Promise<any> = (
+  alpha_symbol
+) => {
+  return pool.query(selectMostRecentCloseQuery, [alpha_symbol]);
+};
+
+export const selectAllMostRecentClose: () => Promise<any> = () => {
+  return pool.query(selectAllMostRecentCloseQuery);
+};
+
+export const selectAllMostCurrent: () => Promise<any> = () => {
+  return pool.query(selectAllMostCurrentQuery);
+};
